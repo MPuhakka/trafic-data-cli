@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{cell, collections::HashMap};
 
 pub struct TablePrinter {
     pub padding: usize,
@@ -58,23 +58,14 @@ impl TablePrinter {
             }
 
             for j in 0..data[i].len() {
-                // TODO the cell printing logic here seems difficult
-                // if we add more logic to this, maintaining separate print paths for these becomes bothersome
+                let cell_width = col_size.get(&j).unwrap() + self.padding;
+                let cell_value = data[i][j].to_string();
                 match col_separator {
                     Some(it) => {
-                        print!(
-                            "{:width$}{}",
-                            data[i][j].to_string(),
-                            it,
-                            width = col_size.get(&j).unwrap() + self.padding,
-                        );
+                        print!("{:width$}{}", cell_value, it, width = cell_width,);
                     }
                     None => {
-                        print!(
-                            "{:width$}",
-                            data[i][j].to_string(),
-                            width = col_size.get(&j).unwrap() + self.padding,
-                        );
+                        print!("{:width$}", cell_value, width = cell_width,);
                     }
                 }
             }
