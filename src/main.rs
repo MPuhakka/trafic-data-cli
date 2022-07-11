@@ -41,7 +41,7 @@ async fn main() {
             let handler = IncidentCommandHandler {
                 trafic_service: &TraficService::init(http_client),
                 table_printer: &TablePrinter {
-                    padding: 9,
+                    padding: 4,
                     header_underline: true,
                     column_separator: true,
                 },

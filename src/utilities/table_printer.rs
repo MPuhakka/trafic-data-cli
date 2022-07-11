@@ -1,4 +1,4 @@
-use std::{cell, collections::HashMap};
+use std::collections::HashMap;
 
 pub struct TablePrinter {
     pub padding: usize,
