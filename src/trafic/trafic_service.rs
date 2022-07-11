@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use super::{server_response::*, SituationRecord};
 
 pub struct TraficService<'a> {
@@ -9,8 +7,8 @@ pub struct TraficService<'a> {
 
 #[derive(Debug)]
 pub enum TraficServiceError {
-    unexpected,
-    malformed,
+    Unexpected,
+    Malformed,
 }
 
 impl<'a> TraficService<'a> {
@@ -30,14 +28,14 @@ impl<'a> TraficService<'a> {
             .await;
 
         if res.is_err() {
-            return Err(TraficServiceError::unexpected);
+            return Err(TraficServiceError::Unexpected);
         }
 
         match res.unwrap().json::<ServerResponse>().await {
             Ok(res) => Ok(res.list_situations()),
             Err(reason) => {
                 println!("{:?}", reason);
-                Err(TraficServiceError::malformed)
+                Err(TraficServiceError::Malformed)
             }
         }
     }
