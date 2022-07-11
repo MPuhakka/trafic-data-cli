@@ -36,13 +36,18 @@ impl<'a> IncidentCommandHandler<'a> {
                 }
 
                 let mut print_data: Vec<Vec<String>> = Vec::new();
-                let header_row: Vec<String> = vec!["kind", "count"]
+                let header_row: Vec<String> = vec!["informal severity", "severity", "count"]
                     .iter()
                     .map(|it| it.to_uppercase().to_string())
                     .collect();
                 print_data.push(header_row);
                 for (key, value) in reasons.iter() {
-                    let row: Vec<String> = vec![String::from(key), value.to_string()];
+                    let severity = match IncidentSeverity::from_informal_severity(key) {
+                        Ok(it) => it.to_string(),
+                        Err(_) => String::from(" - "),
+                    };
+
+                    let row: Vec<String> = vec![String::from(key), severity, value.to_string()];
                     print_data.push(row);
                 }
                 self.table_printer.print(&print_data);
