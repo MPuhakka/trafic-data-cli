@@ -2,12 +2,19 @@ use std::collections::HashMap;
 
 pub struct TablePrinter {
     pub padding: usize,
+    pub header_underline: bool,
+    pub column_separator: bool,
 }
 
 impl TablePrinter {
     pub fn print(&self, data: &Vec<Vec<impl ToString>>) {
         let mut row_count: usize = 0;
         let mut col_size: HashMap<usize, usize> = HashMap::new();
+        let col_separator = if self.column_separator {
+            Some('|')
+        } else {
+            None
+        };
         if data.len() == 0 {
             panic!("cannot print empty dataset");
         }
@@ -19,7 +26,7 @@ impl TablePrinter {
             }
             for j in 0..data[i].len() {
                 let current_max = col_size.get(&j).unwrap_or(&0);
-                let current_row_length = &data[i][j].to_string().len();
+                let current_row_length = &data[i][j].to_string().chars().count();
 
                 let updated = if current_max < current_row_length {
                     current_row_length
@@ -30,13 +37,46 @@ impl TablePrinter {
                 col_size.insert(j, updated.to_owned());
             }
         }
+
         for i in 0..data.len() {
-            for j in 0..data[i].len() {
-                print!(
-                    "{:width$}",
-                    data[i][j].to_string(),
-                    width = col_size.get(&j).unwrap() + self.padding,
+            // print underline
+            // this works, I have no idea why it works
+            // do not look
+            if self.header_underline && i == 1 {
+                let size = col_size.values().fold(
+                    self.padding * (col_size.len() - 1)
+                        + match col_separator {
+                            Some(value) => col_size.len() * value.len_utf8() + self.padding,
+                            None => 0,
+                        },
+                    |accumulator, current| accumulator + current,
                 );
+                for _ in 0..size {
+                    print!("-");
+                }
+                print!("\n");
+            }
+
+            for j in 0..data[i].len() {
+                // TODO the cell printing logic here seems difficult
+                // if we add more logic to this, maintaining separate print paths for these becomes bothersome
+                match col_separator {
+                    Some(it) => {
+                        print!(
+                            "{:width$}{}",
+                            data[i][j].to_string(),
+                            it,
+                            width = col_size.get(&j).unwrap() + self.padding,
+                        );
+                    }
+                    None => {
+                        print!(
+                            "{:width$}",
+                            data[i][j].to_string(),
+                            width = col_size.get(&j).unwrap() + self.padding,
+                        );
+                    }
+                }
             }
             print!("\n");
         }
