@@ -651,16 +651,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust-playground"
-version = "0.1.0"
-dependencies = [
- "clap",
- "reqwest",
- "serde",
- "tokio",
-]
-
-[[package]]
 name = "ryu"
 version = "1.0.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -919,6 +909,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7b7358be39f2f274f322d2aaed611acc57f382e8eb1e5b48cb9ae30933495ce7"
 dependencies = [
  "once_cell",
+]
+
+[[package]]
+name = "trafic-cli"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "reqwest",
+ "serde",
+ "tokio",
 ]
 
 [[package]]

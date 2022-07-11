@@ -1,12 +1,12 @@
-mod trafic;
-use std::collections::HashMap;
+mod commands;
+pub mod trafic;
 
 use crate::trafic::*;
-
 use clap::{Args, Parser, Subcommand};
+use commands::{incident_overview, list_incidents};
 
 #[derive(Parser)]
-#[clap(author, version, about, long_about = None)]
+#[clap(author = "by Mika Puhakka", about = "CLI for reading trafic data in tampere region from various open APIs", version, long_about = None)]
 #[clap(propagate_version = true)]
 struct Cli {
     #[clap(subcommand)]
@@ -38,34 +38,12 @@ struct TraficIncidentList {}
 #[tokio::main]
 async fn main() {
     let cli = Cli::parse();
-    let client = &reqwest::Client::new();
-    let trafic_service = TraficService::init(client);
+    let http_client = &reqwest::Client::new();
+    let trafic_service = TraficService::init(http_client);
     match &cli.command {
         Commands::Trafic(trafic) => match &trafic.command {
-            TraficSubCommands::Overview(_) => match trafic_service.get_incidents().await {
-                Ok(incidents) => {
-                    let mut reasons: HashMap<String, u16> = HashMap::new();
-                    for incident in incidents.iter() {
-                        let key = &incident.severity;
-                        let value: u16 = if reasons.contains_key(key) {
-                            reasons.get(key).unwrap() + 1
-                        } else {
-                            1
-                        };
-                        reasons.insert(key.clone(), value);
-                    }
-                    println!("{:?}", reasons);
-                }
-                Err(reason) => println!("{:?}", reason),
-            },
-            TraficSubCommands::Incidents(_) => match trafic_service.get_incidents().await {
-                Ok(incidents) => {
-                    for incident in incidents.iter() {
-                        println!("{}", &incident.toDisplayString());
-                    }
-                }
-                Err(reason) => println!("{:?}", reason),
-            },
+            TraficSubCommands::Overview(_) => incident_overview(&trafic_service).await,
+            TraficSubCommands::Incidents(_) => list_incidents(&trafic_service).await,
         },
     }
 }
