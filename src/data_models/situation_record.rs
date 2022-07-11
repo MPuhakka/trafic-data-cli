@@ -1,5 +1,8 @@
 #![allow(non_snake_case)]
 
+use super::IncidentSeverity;
+use super::InvalidDataError;
+
 use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct GlmLineString {
@@ -28,7 +31,16 @@ pub struct SituationRecord {
 }
 
 impl SituationRecord {
-    pub fn toDisplayString(&self) -> String {
+    pub fn get_severity(&self) -> Option<IncidentSeverity> {
+        match IncidentSeverity::from_informal_severity(&self.severity) {
+            Ok(it) => Some(it),
+            Err(error) => {
+                println!("failed to get incident severity: {:?}", error);
+                None
+            }
+        }
+    }
+    pub fn to_display_string(&self) -> String {
         let comment = match &self.generalPublicComment {
             Some(it) => it,
             None => "no additional information",

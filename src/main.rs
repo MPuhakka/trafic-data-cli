@@ -4,7 +4,7 @@ pub mod services;
 
 use crate::services::*;
 use clap::{Args, Parser, Subcommand};
-use commands::{incident_overview, list_incidents};
+use commands::{incident_overview, list_incidents, TraficIncidentList};
 
 #[derive(Parser)]
 #[clap(author = "by Mika Puhakka", about = "CLI for reading trafic data in tampere region from various open APIs", version, long_about = None)]
@@ -32,10 +32,6 @@ enum TraficSubCommands {
 }
 #[derive(Args)]
 struct TraficOverview {}
-
-#[derive(Args)]
-struct TraficIncidentList {}
-
 #[tokio::main]
 async fn main() {
     let cli = Cli::parse();
@@ -44,7 +40,7 @@ async fn main() {
     match &cli.command {
         Commands::Trafic(trafic) => match &trafic.command {
             TraficSubCommands::Overview(_) => incident_overview(&trafic_service).await,
-            TraficSubCommands::Incidents(_) => list_incidents(&trafic_service).await,
+            TraficSubCommands::Incidents(command) => list_incidents(&trafic_service, command).await,
         },
     }
 }
