@@ -1,11 +1,12 @@
 mod commands;
 pub mod data_models;
 pub mod services;
+pub mod utilities;
 
 use crate::services::*;
 use clap::{Args, Parser, Subcommand};
-use commands::{incident_overview, list_incidents, TraficIncidentList};
-
+use commands::{IncidentCommandHandler, TraficIncidentList};
+use utilities::TablePrinter;
 #[derive(Parser)]
 #[clap(author = "by Mika Puhakka", about = "CLI for reading trafic data in tampere region from various open APIs", version, long_about = None)]
 #[clap(propagate_version = true)]
@@ -32,15 +33,22 @@ enum TraficSubCommands {
 }
 #[derive(Args)]
 struct TraficOverview {}
+
 #[tokio::main]
 async fn main() {
     let cli = Cli::parse();
     let http_client = &reqwest::Client::new();
-    let trafic_service = TraficService::init(http_client);
     match &cli.command {
-        Commands::Trafic(trafic) => match &trafic.command {
-            TraficSubCommands::Overview(_) => incident_overview(&trafic_service).await,
-            TraficSubCommands::Incidents(command) => list_incidents(&trafic_service, command).await,
-        },
+        Commands::Trafic(trafic) => {
+            let handler = IncidentCommandHandler {
+                trafic_service: &TraficService::init(http_client),
+                table_printer: &TablePrinter { padding: Some(3) },
+            };
+
+            match &trafic.command {
+                TraficSubCommands::Overview(_) => handler.incident_overview().await,
+                TraficSubCommands::Incidents(command) => handler.list_incidents(command).await,
+            }
+        }
     }
 }
