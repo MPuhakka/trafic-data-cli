@@ -84,7 +84,7 @@ impl<'a> IncidentCommandHandler<'a> {
                         incident
                             .endTime
                             .as_ref()
-                            .unwrap_or(&String::from("ongoing"))
+                            .unwrap_or(&String::from("none"))
                             .to_owned(),
                         severity_string,
                     ]);
