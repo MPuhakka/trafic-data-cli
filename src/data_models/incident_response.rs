@@ -9,12 +9,12 @@ struct SituationPublicationLight {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct ServerResponse {
+pub struct IncidentResponse {
     modelBaseVersion: String,
     situationPublicationLight: SituationPublicationLight,
 }
 
-impl ServerResponse {
+impl IncidentResponse {
     pub fn list_situations(&self) -> Vec<SituationRecord> {
         self.situationPublicationLight.situationRecord.to_owned()
     }

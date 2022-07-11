@@ -1,7 +1,8 @@
 mod commands;
-pub mod trafic;
+pub mod data_models;
+pub mod services;
 
-use crate::trafic::*;
+use crate::services::*;
 use clap::{Args, Parser, Subcommand};
 use commands::{incident_overview, list_incidents};
 

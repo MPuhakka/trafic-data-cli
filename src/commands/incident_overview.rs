@@ -1,4 +1,4 @@
-use crate::trafic::*;
+use crate::services::*;
 use std::collections::HashMap;
 
 pub async fn incident_overview<'a>(trafic_service: &TraficService<'a>) {

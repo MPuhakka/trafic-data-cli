@@ -1,4 +1,4 @@
-use crate::trafic::*;
+use crate::services::*;
 
 pub async fn list_incidents<'a>(service: &TraficService<'a>) {
     match service.get_incidents().await {

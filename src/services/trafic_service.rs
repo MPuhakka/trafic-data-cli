@@ -1,4 +1,4 @@
-use super::{server_response::*, SituationRecord};
+use crate::data_models::*;
 
 pub struct TraficService<'a> {
     api_url: &'a str,
@@ -31,7 +31,7 @@ impl<'a> TraficService<'a> {
             return Err(TraficServiceError::Unexpected);
         }
 
-        match res.unwrap().json::<ServerResponse>().await {
+        match res.unwrap().json::<IncidentResponse>().await {
             Ok(res) => Ok(res.list_situations()),
             Err(reason) => {
                 println!("{:?}", reason);
