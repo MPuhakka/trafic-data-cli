@@ -35,13 +35,12 @@ impl<'a> IncidentCommandHandler<'a> {
                     reasons.insert(key.clone(), value);
                 }
 
-                let printer = TablePrinter { padding: Some(3) };
                 let mut print_data: Vec<Vec<String>> = Vec::new();
                 for (key, value) in reasons.iter() {
                     let row: Vec<String> = vec![String::from(key), value.to_string()];
                     print_data.push(row);
                 }
-                printer.print(&print_data);
+                self.table_printer.print(&print_data);
             }
             Err(reason) => println!("{:?}", reason),
         }

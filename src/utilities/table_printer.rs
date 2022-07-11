@@ -1,14 +1,10 @@
 use std::collections::HashMap;
 
 pub struct TablePrinter {
-    pub padding: Option<usize>,
+    pub padding: usize,
 }
 
 impl TablePrinter {
-    pub fn get_padding(&self) -> usize {
-        self.padding.unwrap_or(1)
-    }
-
     pub fn print(&self, data: &Vec<Vec<impl ToString>>) {
         let mut row_count: usize = 0;
         let mut col_size: HashMap<usize, usize> = HashMap::new();
@@ -39,7 +35,7 @@ impl TablePrinter {
                 print!(
                     "{:width$}",
                     data[i][j].to_string(),
-                    width = col_size.get(&j).unwrap() + self.get_padding(),
+                    width = col_size.get(&j).unwrap() + self.padding,
                 );
             }
             print!("\n");
