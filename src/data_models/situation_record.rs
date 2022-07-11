@@ -1,7 +1,6 @@
 #![allow(non_snake_case)]
 
 use super::IncidentSeverity;
-use super::InvalidDataError;
 
 use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug, Clone)]
