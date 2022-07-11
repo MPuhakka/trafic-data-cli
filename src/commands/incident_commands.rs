@@ -36,6 +36,11 @@ impl<'a> IncidentCommandHandler<'a> {
                 }
 
                 let mut print_data: Vec<Vec<String>> = Vec::new();
+                let header_row: Vec<String> = vec!["kind", "count"]
+                    .iter()
+                    .map(|it| it.to_uppercase().to_string())
+                    .collect();
+                print_data.push(header_row);
                 for (key, value) in reasons.iter() {
                     let row: Vec<String> = vec![String::from(key), value.to_string()];
                     print_data.push(row);
@@ -73,6 +78,12 @@ impl<'a> IncidentCommandHandler<'a> {
                 };
 
                 let mut data: Vec<Vec<String>> = Vec::new();
+                let header_row: Vec<String> = vec!["id", "start time", "end time", "severity"]
+                    .iter()
+                    .map(|it| it.to_uppercase().to_string())
+                    .collect();
+                data.push(header_row);
+
                 for incident in filtered.iter() {
                     let severity_string = match incident.get_severity() {
                         Some(it) => it.to_string(),
