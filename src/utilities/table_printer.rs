@@ -13,13 +13,13 @@ impl TablePrinter {
         let mut row_count: usize = 0;
         let mut col_size: HashMap<usize, usize> = HashMap::new();
         if data.len() == 0 {
-            return;
+            panic!("cannot print empty dataset");
         }
         for i in 0..data.len() {
             if row_count == 0 {
                 row_count = data[i].len();
             } else if row_count != data[i].len() {
-                return;
+                panic!("row length anomaly at {i}");
             }
             for j in 0..data[i].len() {
                 let current_max = col_size.get(&j).unwrap_or(&0);
