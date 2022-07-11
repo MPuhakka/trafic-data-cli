@@ -40,20 +40,4 @@ impl SituationRecord {
             }
         }
     }
-    pub fn to_display_string(&self) -> String {
-        let comment = match &self.generalPublicComment {
-            Some(it) => it,
-            None => "no additional information",
-        };
-
-        let end = match &self.endTime {
-            Some(it) => it,
-            None => "ongoing",
-        };
-
-        format!(
-            "{}\n{}\n{}\n{}\n{}\n",
-            self.id, self.startTime, end, self.severity, comment
-        )
-    }
 }
