@@ -5,10 +5,10 @@ pub mod utilities;
 
 use crate::services::*;
 use clap::{Args, Parser, Subcommand};
-use commands::{IncidentCommandHandler, TraficIncidentList};
+use commands::{IncidentCommandHandler, TraficIncidentList, TraficOverview};
 use utilities::TablePrinter;
 #[derive(Parser)]
-#[clap(author = "by Mika Puhakka", about = "CLI for reading trafic data in tampere region from various open APIs", version, long_about = None)]
+#[clap(author = "by Mika Puhakka", about = "CLI for reading data in tampere region from various open APIs", version, long_about = None)]
 #[clap(propagate_version = true)]
 struct Cli {
     #[clap(subcommand)]
@@ -31,8 +31,6 @@ enum TraficSubCommands {
     Overview(TraficOverview),
     Incidents(TraficIncidentList),
 }
-#[derive(Args)]
-struct TraficOverview {}
 
 #[tokio::main]
 async fn main() {

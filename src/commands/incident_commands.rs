@@ -12,6 +12,9 @@ pub struct TraficIncidentList {
     severity: Option<String>,
 }
 
+#[derive(Args)]
+pub struct TraficOverview {}
+
 pub struct IncidentCommandHandler<'a> {
     pub trafic_service: &'a TraficService<'a>,
     pub table_printer: &'a TablePrinter,
